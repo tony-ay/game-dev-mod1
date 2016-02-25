@@ -1,5 +1,5 @@
 # game-dev-mod1
-2D game worked on in Game Dev course
+2D game for Game Dev course. Written in Python, using the Pygame library.
 
 Project worked on Spring 2016 by 4-person team, including myself.
 I handled the majority of the player movement, enemy AI, collision and interaction of enemy/player.
