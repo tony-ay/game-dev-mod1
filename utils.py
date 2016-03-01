@@ -43,7 +43,7 @@ class sprite:
 
 		#graphic attributes
 		if init_image is not None:
-			self.img = pygame.image.load( init_image ).convert_alpha()
+			self.img = init_image
 		else:
 			self.img = Surface((25, 25))
 		#for dim we now use the first section of the image as width and height
@@ -62,15 +62,24 @@ class sprite:
 	#returns a Rect the same size and position as the sprite image
 	def get_hitbox(self):
 		return pygame.Rect(self.pos.x, self.pos.y, self.dim[0], self.dim[1])
-        def get_rect(self,left,top,width,height):
-                return pygame.Rect(left, top, width, height)
+
+	def get_rect(self,left,top,width,height):
+		return pygame.Rect(left, top, width, height)
+
 	#update velocity of the sprite
 	def update_vel(self, time_diff):
 		self.velocity = self.velocity.add( self.accel.scale( time_diff ) )
+
 	#update position of the sprite
 	def update_pos(self, time_diff):
 		self.pos = self.pos.add( self.velocity.scale( time_diff ) )
 
 	#draw sprite to the screen
-	def draw_G(self, img, surface, clip=None):
-		surface.blit(img, ( int(self.pos.x), int(self.pos.y) ), area=clip)
+	def draw_G(self, screenpos, img, surface, clip=None):
+		drawpos = self.pos.subtract(screenpos)
+		surface.blit(img, ( int(drawpos.x), int(drawpos.y)), area=clip)
+	def draw_G_offset(self, screenpos, img, surface,offset_y ,clip=None):
+		drawpos = self.pos.subtract(screenpos)
+		pleb=int(drawpos.y)
+		pleb-=offset_y
+		surface.blit(img, ( int(drawpos.x),pleb ), area=clip)

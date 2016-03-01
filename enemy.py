@@ -3,14 +3,12 @@ from utils import *
 #enemy class
 class enemy(sprite):
 	def __init__(self, pos, vel, image):
-		sprite.__init__(self, pos, vel, image)
+		sprite.__init__(self, pos, vel, image, (40, 56))
 
 		#enemy attributes
-		self.life_timer = 2000
+		self.life_timer = 4500
 
 		#frame variables
-		self.img_w = 40
-		self.img_h = 56
 		self.frame = 0
 		self.last_frame_time = 0
 		self.time_delay = 100
@@ -33,8 +31,8 @@ class enemy(sprite):
 			self.frame=(self.frame+1)%self.frame_ct
 			self.last_frame_time=0
 
-		self.life_timer -= 1
+		self.life_timer -= time_diff
 
-	def draw(self, surface):
-		clip = pygame.Rect(self.img_w * self.frame, 0, self.img_w, self.img_h )
-		sprite.draw_G(self, self.img, surface, clip)
+	def draw(self, surface, screenpos):
+		clip = pygame.Rect(self.dim[0] * self.frame, 0, self.dim[0], self.dim[1] )
+		sprite.draw_G(self, screenpos, self.img, surface, clip)
