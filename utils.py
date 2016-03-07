@@ -1,6 +1,16 @@
 import pygame
 import math
 
+#function to fade image
+def blit_alpha(target, source, location, opacity):
+        x = location[0]
+        y = location[1]
+        temp = pygame.Surface((source.get_width(), source.get_height())).convert()
+        temp.blit(target, (-x, -y))
+        temp.blit(source, (0, 0))
+        temp.set_alpha(opacity)        
+        target.blit(temp, location)
+
 #2d vector class
 class vector2:
 	# constructor
@@ -14,6 +24,12 @@ class vector2:
 		return "({}, {})".format(self.x, self.y)
 
 	# other methods here...
+
+	def equals(self, vec):
+		if self.x == vec.x:
+			if self.y == vec.y:
+				return True
+		return False
 
 	def add(self, vec):
 		return vector2(self.x + vec.x, self.y + vec.y)
@@ -59,6 +75,13 @@ class sprite:
 	def get_center(self):
 		return vector2(self.pos.x + self.dim[0]/2, self.pos.y + self.dim[1]/2)
 
+	def convert_center(self, center_pos):
+		return vector2(center_pos.x - self.dim[0]/2, center_pos.y - self.dim[1]/2)
+
+	#sets position using a center positiona
+	def set_center(self, center_pos):
+		self.pos = self.convert_center(center_pos)
+
 	#returns a Rect the same size and position as the sprite image
 	def get_hitbox(self):
 		return pygame.Rect(self.pos.x, self.pos.y, self.dim[0], self.dim[1])
@@ -78,8 +101,11 @@ class sprite:
 	def draw_G(self, screenpos, img, surface, clip=None):
 		drawpos = self.pos.subtract(screenpos)
 		surface.blit(img, ( int(drawpos.x), int(drawpos.y)), area=clip)
+
 	def draw_G_offset(self, screenpos, img, surface,offset_y ,clip=None):
 		drawpos = self.pos.subtract(screenpos)
-		pleb=int(drawpos.y)
-		pleb-=offset_y
-		surface.blit(img, ( int(drawpos.x),pleb ), area=clip)
+		surface.blit(img, ( int(drawpos.x), int(drawpos.y-offset_y) ), area=clip)
+
+	def draw_G_o(self, screenpos, img, surface, offset, clip=None):
+		drawpos = self.pos.subtract(screenpos).add(offset)
+		surface.blit(img, (int(drawpos.x), int(drawpos.y)), clip)
